@@ -13,8 +13,11 @@
 
     <section id="things">
 
-        <p>THINGS GO HERE!!!</p>
+        {% for thing in things %}
 
+            <p><a href="/thing/{{thing.id}}">{{thing.item}}</a></p>
+
+        {% endfor %}
     </section>
 
 
