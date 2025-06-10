@@ -1,0 +1,46 @@
+{% extends 'pages/base.jinja' %}
+
+{% block title %}
+
+    Flask and Turso DB Demo - New Thing
+
+{% endblock %}
+
+
+{% block content %}
+
+    <h1>{{thing.item}}</h1>
+
+    <article>
+        <form action="/order-thing" method="POST">
+
+            <label>
+                Quantity:
+                <input name="quantity" type="number" min="1" value="1" required>
+            </label>
+
+            <label>
+                Name:
+                <input name="name" type="text" required>
+            </label>
+
+            <label>
+                Credit Card Number:
+                <input name="cardnum" type="number" maxlength="16" required>
+            </label>
+
+            <label>
+                Name on Card:
+                <input name="cardname" type="text" required>
+            </label>
+
+            <label>
+                Security Code (CVC):
+                <input name="cvc" type="number" maxlength="3" required>
+            </label>
+            
+            <button>Order</button>
+        </form>
+    </article>
+
+{% endblock %}
